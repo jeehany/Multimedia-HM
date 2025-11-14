@@ -1,0 +1,17 @@
+body {
+  padding-top: 56px;
+}
+.sidebar {
+  min-height: calc(100vh - 56px);
+}
+.sidebar .nav-link {
+  color: rgba(255, 255, 255, 0.9);
+}
+.card-summary {
+  min-height: 100px;
+}
+.gallery-item {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+}
