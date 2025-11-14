@@ -16,36 +16,14 @@ include 'header.php';
 
 <div class="card mb-3">
   <div class="card-body">
-    <form method="get" id="alat-filter-form" class="row g-2 auto-filter">
-      <div class="col-md-4"><input type="search" name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari nama atau jenis..."></div>
+    <form method="get" class="row g-2 auto-filter">
+      <div class="col-md-4"><input name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari nama atau jenis..."></div>
       <div class="col-md-2"><select name="kondisi" class="form-select"><option value="">--Kondisi--</option><option value="baik" <?=(!empty($_GET['kondisi']) && $_GET['kondisi']=='baik')?'selected':''?>>baik</option><option value="rusak ringan" <?=(!empty($_GET['kondisi']) && $_GET['kondisi']=='rusak ringan')?'selected':''?>>rusak ringan</option><option value="rusak berat" <?=(!empty($_GET['kondisi']) && $_GET['kondisi']=='rusak berat')?'selected':''?>>rusak berat</option></select></div>
-  <div class="col-md-3"><input type="text" name="lokasi" value="<?=htmlspecialchars($_GET['lokasi'] ?? '')?>" class="form-control" placeholder="Lokasi"></div>
+      <div class="col-md-3"><input name="lokasi" value="<?=htmlspecialchars($_GET['lokasi'] ?? '')?>" class="form-control" placeholder="Lokasi"></div>
       <div class="col-md-3 text-end"><?php if(can_edit()): ?><a class="btn btn-success" href="alat_add.php"><i class="fa fa-plus"></i> Tambah Alat</a><?php endif; ?></div>
     </form>
   </div>
 </div>
-  <script>
-  // Lokal: pastikan filter alat auto-submit (fallback jika skrip global gagal)
-   (function(){
-     try{
-       var form = document.getElementById('alat-filter-form');
-       if(!form) return;
-       var inputs = Array.from(form.querySelectorAll('input[name], select[name], textarea[name]')).filter(function(el){ return el.type !== 'submit' && el.type !== 'button' && !el.dataset.noAuto; });
-       function submitNow(){ try{ form.submit(); }catch(e){} }
-       inputs.forEach(function(el){
-         var isText = el.tagName.toLowerCase() === 'input' && ['text','search','month','date','number'].indexOf(el.type) !== -1 || el.tagName.toLowerCase() === 'textarea';
-         if(isText){
-           var t;
-           el.addEventListener('input', function(){ clearTimeout(t); t=setTimeout(submitNow, 350); });
-           el.addEventListener('change', function(){ clearTimeout(t); t=setTimeout(submitNow, 350); });
-           el.addEventListener('keydown', function(ev){ if(ev.key === 'Enter'){ ev.preventDefault(); submitNow(); } });
-         } else {
-           el.addEventListener('change', submitNow);
-         }
-       });
-     }catch(e){/* ignore */}
-   })();
-  </script>
 
 <div class="card">
   <div class="card-body">
