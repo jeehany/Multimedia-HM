@@ -521,71 +521,28 @@ $total_pengeluaran = get_pengeluaran_total($where);
 <?php
 // Printable views
 if(isset($_GET['print'])){
-    $type = $_GET['report'] ?? $_GET['print'];
+    $type = $_GET['print'];
     echo '<!doctype html><html><head><meta charset="utf-8"><title>Print Report</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"></head><body class="p-4">';
     echo '<h3>Laporan '.htmlspecialchars($type).'</h3>';
-    echo '<p><strong>Tanggal Export:</strong> '.date('Y-m-d H:i:s').'</p><hr>';
-    
     if($type==='alat'){
-        $summary = get_alat_summary();
-        $lokasi_data = get_alat_per_lokasi();
-        echo '<h5>RINGKASAN</h5>';
-        echo '<table class="table table-sm"><tr><td>Total Alat</td><td><strong>'.$summary['total'].'</strong></td></tr>';
-        echo '<tr><td>Kondisi Baik</td><td><strong>'.$summary['baik'].'</strong></td></tr>';
-        echo '<tr><td>Kondisi Rusak</td><td><strong>'.$summary['rusak'].'</strong></td></tr>';
-        echo '<tr><td>Perlu Perbaikan</td><td><strong>'.$summary['perlu_perbaikan'].'</strong></td></tr></table>';
-        
-        echo '<h5>REKAP PER LOKASI</h5>';
-        echo '<table class="table table-sm table-bordered"><thead><tr><th>Lokasi</th><th>Jumlah Alat</th></tr></thead><tbody>';
-        foreach($lokasi_data as $l) {
-            echo '<tr><td>'.htmlspecialchars($l['lokasi']).'</td><td>'.$l['cnt'].'</td></tr>';
-        }
-        echo '</tbody></table>';
-        
-        echo '<h5>DETAIL DATA ALAT</h5>';
-        echo '<table class="table table-bordered table-sm"><thead><tr><th>ID</th><th>Nama</th><th>Jenis</th><th>Kondisi</th><th>Lokasi</th><th>PJ</th><th>Tgl</th></tr></thead><tbody>';
-        $q=mysqli_query($conn,"SELECT * FROM tabel_alat"); 
-        while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_alat'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.htmlspecialchars($r['jenis']).'</td><td>'.$r['kondisi'].'</td><td>'.htmlspecialchars($r['lokasi']).'</td><td>'.htmlspecialchars($r['penanggung_jawab']).'</td><td>'.$r['tanggal_pembelian'].'</td></tr>';
+        echo '<table class="table table-bordered"><thead><tr><th>ID</th><th>Nama</th><th>Jenis</th><th>Kondisi</th><th>Lokasi</th><th>PJ</th><th>Tgl</th></tr></thead><tbody>';
+        $q=mysqli_query($conn,"SELECT * FROM tabel_alat"); while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_alat'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.htmlspecialchars($r['jenis']).'</td><td>'.$r['kondisi'].'</td><td>'.htmlspecialchars($r['lokasi']).'</td><td>'.htmlspecialchars($r['penanggung_jawab']).'</td><td>'.$r['tanggal_pembelian'].'</td></tr>';
         echo '</tbody></table>';
     } elseif($type==='maintenance'){
-        $total_biaya = get_maintenance_total();
-        echo '<h5>RINGKASAN</h5>';
-        echo '<table class="table table-sm"><tr><td>Total Biaya Maintenance</td><td><strong>'.number_format($total_biaya, 0, ',', '.').'</strong></td></tr></table>';
-        
-        echo '<h5>DETAIL MAINTENANCE</h5>';
-        echo '<table class="table table-bordered table-sm"><thead><tr><th>ID</th><th>Alat</th><th>Jenis</th><th>Tanggal</th><th>Teknisi</th><th>Biaya</th><th>Status</th></tr></thead><tbody>';
-        $q=mysqli_query($conn,"SELECT m.*, a.nama_alat FROM tabel_maintenance m LEFT JOIN tabel_alat a ON m.id_alat=a.id_alat ORDER BY m.id_maintenance"); 
-        while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_maintenance'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.htmlspecialchars($r['jenis_maintenance']).'</td><td>'.$r['tanggal'].'</td><td>'.htmlspecialchars($r['teknisi']).'</td><td>'.number_format($r['biaya'],0,',','.').'</td><td>'.$r['status'].'</td></tr>';
+        echo '<table class="table table-bordered"><thead><tr><th>ID</th><th>Alat</th><th>Jenis</th><th>Tanggal</th><th>Teknisi</th><th>Biaya</th><th>Status</th></tr></thead><tbody>';
+        $q=mysqli_query($conn,"SELECT m.*, a.nama_alat FROM tabel_maintenance m LEFT JOIN tabel_alat a ON m.id_alat=a.id_alat"); while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_maintenance'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.htmlspecialchars($r['jenis_maintenance']).'</td><td>'.$r['tanggal'].'</td><td>'.htmlspecialchars($r['teknisi']).'</td><td>'.number_format($r['biaya'],0,',','.').'</td><td>'.$r['status'].'</td></tr>';
         echo '</tbody></table>';
     } elseif($type==='pembelian'){
-        $total_pembelian = get_pembelian_count();
-        echo '<h5>RINGKASAN</h5>';
-        echo '<table class="table table-sm"><tr><td>Total Permohonan</td><td><strong>'.$total_pembelian.'</strong></td></tr></table>';
-        
-        echo '<h5>DETAIL PERMOHONAN PEMBELIAN</h5>';
-        echo '<table class="table table-bordered table-sm"><thead><tr><th>ID</th><th>Nama</th><th>Alasan</th><th>Estimasi</th><th>Tgl</th><th>Status</th></tr></thead><tbody>';
-        $q=mysqli_query($conn,"SELECT * FROM tabel_pembelian"); 
-        while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_pembelian'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.htmlspecialchars(substr($r['alasan'], 0, 50)).'</td><td>'.number_format($r['estimasi_biaya'],0,',','.').'</td><td>'.$r['tanggal_permohonan'].'</td><td>'.$r['status'].'</td></tr>';
+        echo '<table class="table table-bordered"><thead><tr><th>ID</th><th>Nama</th><th>Alasan</th><th>Estimasi</th><th>Tgl</th><th>Status</th></tr></thead><tbody>';
+        $q=mysqli_query($conn,"SELECT * FROM tabel_pembelian"); while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_pembelian'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.htmlspecialchars($r['alasan']).'</td><td>'.number_format($r['estimasi_biaya'],0,',','.').'</td><td>'.$r['tanggal_permohonan'].'</td><td>'.$r['status'].'</td></tr>';
         echo '</tbody></table>';
     } elseif($type==='pengeluaran'){
-        $total_pengeluaran = get_pengeluaran_total();
-        echo '<h5>RINGKASAN</h5>';
-        echo '<table class="table table-sm"><tr><td>Total Pengeluaran</td><td><strong>'.number_format($total_pengeluaran, 0, ',', '.').'</strong></td></tr></table>';
-        
-        echo '<h5>DETAIL PENGELUARAN</h5>';
-        echo '<table class="table table-bordered table-sm"><thead><tr><th>ID</th><th>Jenis</th><th>Nama Alat</th><th>Tanggal</th><th>Nominal</th><th>Keterangan</th></tr></thead><tbody>';
-        $tot = 0; 
-        $q=mysqli_query($conn,"SELECT * FROM tabel_pengeluaran ORDER BY tanggal DESC"); 
-        while($r=mysqli_fetch_assoc($q)){ 
-            $tot += $r['nominal']; 
-            echo '<tr><td>'.$r['id_pengeluaran'].'</td><td>'.$r['jenis_pengeluaran'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.$r['tanggal'].'</td><td>'.number_format($r['nominal'],0,',','.').'</td><td>'.htmlspecialchars($r['keterangan']).'</td></tr>'; 
-        }
-        echo '</tbody></table>';
+        echo '<table class="table table-bordered"><thead><tr><th>ID</th><th>Jenis</th><th>Nama Alat</th><th>Tanggal</th><th>Nominal</th><th>Keterangan</th></tr></thead><tbody>';
+        $tot = 0; $q=mysqli_query($conn,"SELECT * FROM tabel_pengeluaran"); while($r=mysqli_fetch_assoc($q)){ $tot += $r['nominal']; echo '<tr><td>'.$r['id_pengeluaran'].'</td><td>'.$r['jenis_pengeluaran'].'</td><td>'.htmlspecialchars($r['nama_alat']).'</td><td>'.$r['tanggal'].'</td><td>'.number_format($r['nominal'],0,',','.').'</td><td>'.htmlspecialchars($r['keterangan']).'</td></tr>'; }
+        echo '</tbody><tfoot><tr><th colspan="4">Total</th><th>'.number_format($tot,0,',','.').'</th><th></th></tr></tfoot></table>';
     } elseif($type==='konten'){
-        echo '<h5>DETAIL KONTEN MULTIMEDIA</h5>';
-        echo '<table class="table table-bordered table-sm"><thead><tr><th>ID</th><th>Judul</th><th>Jenis</th><th>PJ</th><th>Tgl</th><th>File</th></tr></thead><tbody>';
-        $q=mysqli_query($conn,"SELECT * FROM tabel_konten"); 
-        while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_konten'].'</td><td>'.htmlspecialchars($r['judul']).'</td><td>'.$r['jenis'].'</td><td>'.htmlspecialchars($r['penanggung_jawab']).'</td><td>'.$r['tanggal_upload'].'</td><td>'.htmlspecialchars(basename($r['file_path'])).'</td></tr>';
+        echo '<table class="table table-bordered"><thead><tr><th>ID</th><th>Judul</th><th>Jenis</th><th>PJ</th><th>Tgl</th><th>File</th></tr></thead><tbody>';
+        $q=mysqli_query($conn,"SELECT * FROM tabel_konten"); while($r=mysqli_fetch_assoc($q)) echo '<tr><td>'.$r['id_konten'].'</td><td>'.htmlspecialchars($r['judul']).'</td><td>'.$r['jenis'].'</td><td>'.htmlspecialchars($r['penanggung_jawab']).'</td><td>'.$r['tanggal_upload'].'</td><td>'.htmlspecialchars($r['file_path']).'</td></tr>';
         echo '</tbody></table>';
     }
     echo '<script>window.print();</script></body></html>';
