@@ -45,12 +45,12 @@ $base = rtrim($base, '/');
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/index.php"><i class="fa fa-tachometer-alt"></i> Dashboard</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/views/pages/alat.php"><i class="fa fa-box"></i> Data Alat</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/views/pages/maintenance.php"><i class="fa fa-tools"></i> Maintenance</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/views/pages/pembelian.php"><i class="fa fa-cart-plus"></i> Pembelian</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/views/pages/pengeluaran.php"><i class="fa fa-money-bill"></i> Pengeluaran</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/views/pages/konten.php"><i class="fa fa-photo-video"></i> Konten</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/reports/laporan.php"><i class="fa fa-file-pdf"></i> Laporan</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/alat.php"><i class="fa fa-box"></i> Data Alat</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/maintenance.php"><i class="fa fa-tools"></i> Maintenance</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/pembelian.php"><i class="fa fa-cart-plus"></i> Pembelian</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/pengeluaran.php"><i class="fa fa-money-bill"></i> Pengeluaran</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/konten.php"><i class="fa fa-photo-video"></i> Konten</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="<?= $base ?>/laporan.php"><i class="fa fa-file-pdf"></i> Laporan</a></li>
         </ul>
       </div>
     </nav>
