@@ -3,7 +3,7 @@ require_once 'config.php';
 require_login();
 
 if(!can_edit() && !can_approve()) {
-  // Hanya Kepala atau Admin yang bisa akses (role 'staff' removed)
+    // Hanya Kepala atau Staff/Admin yang bisa akses
 }
 
 if(can_edit()) {

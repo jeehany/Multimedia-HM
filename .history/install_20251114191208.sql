@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS tabel_user (
   nama_user VARCHAR(100) NOT NULL,
   username VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  role ENUM('admin','kepala') NOT NULL DEFAULT 'kepala'
+  role ENUM('admin','kepala','staff') NOT NULL DEFAULT 'staff'
 );
 
 -- tabel_alat
@@ -66,10 +66,10 @@ CREATE TABLE IF NOT EXISTS tabel_konten (
   file_path VARCHAR(255)
 );
 
--- sample data: users (passwords are MD5 for demo: admin123, kepala123, staff123)
+-- sample data: users (passwords are MD5 for demo: admin123, staff123)
 INSERT INTO tabel_user (nama_user, username, password, role) VALUES
 ('Admin HM','admin', MD5('admin123'), 'admin'),
-('Kepala HM','kepala', MD5('kepala123'), 'kepala');
+('Staff HM','staff', MD5('staff123'), 'staff');
 
 -- sample data: alat (>=5)
 INSERT INTO tabel_alat (nama_alat, jenis, kondisi, lokasi, penanggung_jawab, tanggal_pembelian) VALUES

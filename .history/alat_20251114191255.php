@@ -2,7 +2,7 @@
 require_once 'config.php';
 require_login();
 
-// Only admin dapat edit/delete (role 'staff' removed)
+// Only admin dan staff dapat edit/delete
 if (!can_edit()) {
     // Kepala hanya bisa lihat (read-only)
 } else {

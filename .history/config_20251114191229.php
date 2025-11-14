@@ -43,16 +43,14 @@ function is_kepala() {
 }
 
 function is_staff() {
-    // 'staff' role has been removed. Keep function for backward compatibility but always return false.
-    // If you want a non-admin editor role in future, reintroduce and update can_edit().
-    return false;
+    $u = current_user();
+    return $u && $u['role'] === 'staff';
 }
 
 function can_edit() {
     $u = current_user();
     if (!$u) return false;
-    // Only admin can perform create/update/delete now (staff role removed)
-    return $u['role'] === 'admin';
+    return in_array($u['role'], ['admin', 'staff']);
 }
 
 function can_approve() {
