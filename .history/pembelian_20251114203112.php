@@ -79,4 +79,11 @@ while($r=mysqli_fetch_assoc($q)){
 ?></tbody></table>
 </div></div>
 
+<?php if(can_edit()): ?>
+<script>
+function edit(d){ if(typeof d==='string') d=JSON.parse(d); document.getElementById('id').value=d.id_pembelian; document.getElementById('nama_alat').value=d.nama_alat; document.getElementById('estimasi_biaya').value=d.estimasi_biaya; document.getElementById('tanggal_permohonan').value=d.tanggal_permohonan; document.getElementById('alasan').value=d.alasan; document.getElementById('status').value=d.status; }
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
+
 <?php include 'footer.php'; ?>

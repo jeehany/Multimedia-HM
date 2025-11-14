@@ -25,11 +25,15 @@ include 'header.php';
 
 <?php if(can_edit()): ?>
 <div class="card mb-3"><div class="card-body">
-  <form method="get" class="row g-2">
-    <div class="col-md-4"><input name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari nama atau alasan..."></div>
-    <div class="col-md-3"><select name="status" class="form-select"><option value="">--Status--</option><option value="menunggu" <?=(!empty($_GET['status']) && $_GET['status']=='menunggu')?'selected':''?>>menunggu</option><option value="disetujui" <?=(!empty($_GET['status']) && $_GET['status']=='disetujui')?'selected':''?>>disetujui</option><option value="ditolak" <?=(!empty($_GET['status']) && $_GET['status']=='ditolak')?'selected':''?>>ditolak</option></select></div>
-    <div class="col-md-2 text-end"><a class="btn btn-success" href="pembelian_add.php"><i class="fa fa-plus"></i> Tambah</a></div>
-  </form>
+<form method="post" class="row g-3">
+  <input type="hidden" name="id" id="id">
+  <div class="col-md-4"><label class="form-label">Nama Alat</label><input name="nama_alat" id="nama_alat" class="form-control"></div>
+  <div class="col-md-4"><label class="form-label">Estimasi Biaya</label><input type="number" name="estimasi_biaya" id="estimasi_biaya" class="form-control"></div>
+  <div class="col-md-4"><label class="form-label">Tanggal Permohonan</label><input type="date" name="tanggal_permohonan" id="tanggal_permohonan" class="form-control"></div>
+  <div class="col-12"><label class="form-label">Alasan</label><textarea name="alasan" id="alasan" class="form-control"></textarea></div>
+  <div class="col-md-3"><label class="form-label">Status</label><select name="status" id="status" class="form-select"><option value="menunggu">menunggu</option><option value="disetujui">disetujui</option><option value="ditolak">ditolak</option></select></div>
+  <div class="col-12"><button class="btn btn-success">Simpan</button><button type="reset" class="btn btn-secondary" onclick="clearForm()">Reset</button></div>
+</form>
 </div></div>
 <?php else: ?>
 <div class="alert alert-info"><i class="fa fa-eye"></i> Mode Baca Saja (Read-Only) - Gunakan tombol Approve/Tolak untuk mengubah status</div>
@@ -37,19 +41,7 @@ include 'header.php';
 
 <div class="card"><div class="card-body">
 <table class="table table-sm"><thead><tr><th>#</th><th>Nama</th><th>Estimasi</th><th>Tgl</th><th>Status</th><?php if(can_edit() || can_approve()): ?><th>Aksi</th><?php endif; ?></tr></thead><tbody>
-<?php
-// build filters
-$where = [];
-if(!empty($_GET['q'])){
-    $qstr = mysqli_real_escape_string($conn, $_GET['q']);
-    $where[] = "(nama_alat LIKE '%$qstr%' OR alasan LIKE '%$qstr%')";
-}
-if(!empty($_GET['status'])){
-    $where[] = "status='".mysqli_real_escape_string($conn,$_GET['status'])."'";
-}
-$sql = "SELECT * FROM tabel_pembelian" . (count($where)? ' WHERE '.implode(' AND ',$where): '') . " ORDER BY id_pembelian DESC";
-$q=mysqli_query($conn,$sql);
-while($r=mysqli_fetch_assoc($q)){
+<?php $q=mysqli_query($conn,"SELECT * FROM tabel_pembelian ORDER BY id_pembelian DESC"); while($r=mysqli_fetch_assoc($q)){
   $status_badge = '';
   if($r['status'] === 'menunggu') $status_badge = '<span class="badge bg-warning">menunggu</span>';
   elseif($r['status'] === 'disetujui') $status_badge = '<span class="badge bg-success">disetujui</span>';
@@ -63,7 +55,7 @@ while($r=mysqli_fetch_assoc($q)){
   echo '<td>'.$status_badge.'</td>';
   
   if(can_edit()) {
-      echo '<td><a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a></td>';
+      echo '<td><a class="btn btn-sm btn-primary me-1" href="#" onclick="edit('.htmlspecialchars(json_encode($r), ENT_QUOTES).')">Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')">Hapus</a></td>';
   } elseif(can_approve()) {
       echo '<td>';
       if($r['status'] === 'menunggu') {
@@ -78,5 +70,12 @@ while($r=mysqli_fetch_assoc($q)){
 }
 ?></tbody></table>
 </div></div>
+
+<?php if(can_edit()): ?>
+<script>
+function edit(d){ if(typeof d==='string') d=JSON.parse(d); document.getElementById('id').value=d.id_pembelian; document.getElementById('nama_alat').value=d.nama_alat; document.getElementById('estimasi_biaya').value=d.estimasi_biaya; document.getElementById('tanggal_permohonan').value=d.tanggal_permohonan; document.getElementById('alasan').value=d.alasan; document.getElementById('status').value=d.status; }
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
 
 <?php include 'footer.php'; ?>

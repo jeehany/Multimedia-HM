@@ -35,11 +35,18 @@ include 'header.php';
       $thumb = $r['file_path'] ? $r['file_path'] : 'https://via.placeholder.com/150';
       echo '<div class="card" style="width:160px"><img src="'.htmlspecialchars($thumb).'" class="gallery-item card-img-top"><div class="card-body p-2"><h6 class="card-title" style="font-size:13px">'.htmlspecialchars($r['judul']).'</h6><p style="font-size:11px">'.htmlspecialchars($r['jenis']).'<br>'.htmlspecialchars($r['penanggung_jawab']).'</p>';
       if(can_edit()) {
-        echo '<div class="d-flex"><a class="btn btn-sm btn-primary me-1" href="konten_edit.php?id='.$r['id_konten'].'"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_konten'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a></div>';
+        echo '<div class="d-flex"><a class="btn btn-sm btn-primary me-1" href="#" onclick="edit('.htmlspecialchars(json_encode($r), ENT_QUOTES).')">Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_konten'].'" onclick="return confirm(\'Hapus?\')">Hapus</a></div>';
       }
       echo '</div></div>';
     } ?>
   </div>
 </div></div>
+
+<?php if(can_edit()): ?>
+<script>
+function edit(d){ if(typeof d==='string') d=JSON.parse(d); document.getElementById('id').value=d.id_konten; document.getElementById('judul').value=d.judul; document.getElementById('jenis').value=d.jenis; document.getElementById('tanggal_upload').value=d.tanggal_upload; document.getElementById('penanggung_jawab').value=d.penanggung_jawab; document.getElementById('deskripsi').value=d.deskripsi; }
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
 
 <?php include 'footer.php'; ?>

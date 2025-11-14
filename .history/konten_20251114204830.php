@@ -42,4 +42,11 @@ include 'header.php';
   </div>
 </div></div>
 
+<?php if(can_edit()): ?>
+<script>
+function edit(d){ if(typeof d==='string') d=JSON.parse(d); document.getElementById('id').value=d.id_konten; document.getElementById('judul').value=d.judul; document.getElementById('jenis').value=d.jenis; document.getElementById('tanggal_upload').value=d.tanggal_upload; document.getElementById('penanggung_jawab').value=d.penanggung_jawab; document.getElementById('deskripsi').value=d.deskripsi; }
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
+
 <?php include 'footer.php'; ?>

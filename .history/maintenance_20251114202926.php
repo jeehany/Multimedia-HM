@@ -75,4 +75,19 @@ include 'header.php';
   </div>
 </div>
 
+<?php if(can_edit()): ?>
+<script>
+function edit(d){ if(typeof d === 'string') d=JSON.parse(d);
+ document.getElementById('id').value = d.id_maintenance;
+ document.getElementById('id_alat').value = d.id_alat;
+ document.getElementById('jenis_maintenance').value = d.jenis_maintenance;
+ document.getElementById('tanggal').value = d.tanggal;
+ document.getElementById('teknisi').value = d.teknisi;
+ document.getElementById('biaya').value = d.biaya;
+ document.getElementById('status').value = d.status;
+}
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
+
 <?php include 'footer.php'; ?>

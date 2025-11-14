@@ -38,9 +38,15 @@ $q = mysqli_query($conn, "SELECT * FROM tabel_pengeluaran WHERE $where ORDER BY 
 $total = 0;
 ?>
 <table class="table table-striped"><thead><tr><th>#</th><th>Jenis</th><th>Nama Alat</th><th>Tanggal</th><th>Nominal</th><th>Keterangan</th><?php if(can_edit()): ?><th>Aksi</th><?php endif; ?></tr></thead><tbody>
-<?php while($r=mysqli_fetch_assoc($q)){ $total += $r['nominal']; echo '<tr>'; echo '<td>'.$r['id_pengeluaran'].'</td>'; echo '<td>'.$r['jenis_pengeluaran'].'</td>'; echo '<td>'.htmlspecialchars($r['nama_alat']).'</td>'; echo '<td>'.$r['tanggal'].'</td>'; echo '<td>'.number_format($r['nominal'],0,',','.').'</td>'; echo '<td>'.htmlspecialchars($r['keterangan']).'</td>'; if(can_edit()) { echo '<td><a class="btn btn-sm btn-primary me-1" href="pengeluaran_edit.php?id='.$r['id_pengeluaran'].'"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_pengeluaran'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a></td>'; } echo '</tr>'; } ?></tbody>
+<?php while($r=mysqli_fetch_assoc($q)){ $total += $r['nominal']; echo '<tr>'; echo '<td>'.$r['id_pengeluaran'].'</td>'; echo '<td>'.$r['jenis_pengeluaran'].'</td>'; echo '<td>'.htmlspecialchars($r['nama_alat']).'</td>'; echo '<td>'.$r['tanggal'].'</td>'; echo '<td>'.number_format($r['nominal'],0,',','.').'</td>'; echo '<td>'.htmlspecialchars($r['keterangan']).'</td>'; if(can_edit()) { echo '<td><a class="btn btn-sm btn-danger" href="?delete='.$r['id_pengeluaran'].'" onclick="return confirm(\'Hapus?\')">Hapus</a></td>'; } echo '</tr>'; } ?></tbody>
 <tfoot><tr><th colspan="4">Total</th><th><?=number_format($total,0,',','.')?></th><?php if(can_edit()): ?><th colspan="2"></th><?php else: ?><th></th><?php endif; ?></tr></tfoot>
 </table>
 </div></div>
+
+<?php if(can_edit()): ?>
+<script>
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
 
 <?php include 'footer.php'; ?>

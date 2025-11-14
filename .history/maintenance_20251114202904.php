@@ -39,20 +39,7 @@ include 'header.php';
       <thead><tr><th>#</th><th>Alat</th><th>Jenis</th><th>Tanggal</th><th>Teknisi</th><th>Biaya</th><th>Status</th><?php if(can_edit() || can_approve()): ?><th>Aksi</th><?php endif; ?></tr></thead>
       <tbody>
       <?php
-      // Build filters
-      $where = [];
-      if(!empty($_GET['q'])){
-          $qstr = mysqli_real_escape_string($conn, $_GET['q']);
-          $where[] = "(a.nama_alat LIKE '%$qstr%' OR m.teknisi LIKE '%$qstr%')";
-      }
-      if(!empty($_GET['status'])){
-          $where[] = "m.status='".mysqli_real_escape_string($conn,$_GET['status'])."'";
-      }
-      if(!empty($_GET['id_alat'])){
-          $where[] = "m.id_alat='".((int)$_GET['id_alat'])."'";
-      }
-      $sql = "SELECT m.*, a.nama_alat FROM tabel_maintenance m JOIN tabel_alat a ON m.id_alat=a.id_alat" . (count($where)? ' WHERE '.implode(' AND ',$where): '') . " ORDER BY id_maintenance DESC";
-      $q = mysqli_query($conn, $sql);
+      $q = mysqli_query($conn, "SELECT m.*, a.nama_alat FROM tabel_maintenance m JOIN tabel_alat a ON m.id_alat=a.id_alat ORDER BY id_maintenance DESC");
       while($r = mysqli_fetch_assoc($q)){
           echo '<tr>';
           echo '<td>'.$r['id_maintenance'].'</td>';
@@ -63,7 +50,7 @@ include 'header.php';
           echo '<td>'.number_format($r['biaya'],0,',','.').'</td>';
           echo '<td>'.htmlspecialchars($r['status']).'</td>';
           if(can_edit()) {
-              echo '<td><a class="btn btn-sm btn-primary me-1" href="maintenance_edit.php?id='.$r['id_maintenance'].'"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_maintenance'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a></td>';
+              echo '<td><a class="btn btn-sm btn-primary me-1" href="#" onclick="edit('.htmlspecialchars(json_encode($r), ENT_QUOTES).')">Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_maintenance'].'" onclick="return confirm(\'Hapus?\')">Hapus</a></td>';
           } elseif(can_approve()) {
               echo '<td><span class="badge bg-secondary">Read-Only</span></td>';
           }
@@ -74,5 +61,20 @@ include 'header.php';
     </table>
   </div>
 </div>
+
+<?php if(can_edit()): ?>
+<script>
+function edit(d){ if(typeof d === 'string') d=JSON.parse(d);
+ document.getElementById('id').value = d.id_maintenance;
+ document.getElementById('id_alat').value = d.id_alat;
+ document.getElementById('jenis_maintenance').value = d.jenis_maintenance;
+ document.getElementById('tanggal').value = d.tanggal;
+ document.getElementById('teknisi').value = d.teknisi;
+ document.getElementById('biaya').value = d.biaya;
+ document.getElementById('status').value = d.status;
+}
+function clearForm(){ document.getElementById('id').value=''; }
+</script>
+<?php endif; ?>
 
 <?php include 'footer.php'; ?>
