@@ -31,39 +31,44 @@ include 'header.php';
     <table class="table table-striped">
       <thead><tr><th>#</th><th>Nama</th><th>Jenis</th><th>Kondisi</th><th>Lokasi</th><th>PJ</th><th>Tgl Beli</th><?php if(can_edit()): ?><th>Aksi</th><?php endif; ?></tr></thead>
       <tbody>
-    <?php
-    // build filters
-    $where = [];
-    if(!empty($_GET['q'])){
-      $qstr = mysqli_real_escape_string($conn, $_GET['q']);
-      $where[] = "(nama_alat LIKE '%$qstr%' OR jenis LIKE '%$qstr%')";
-    }
-    if(!empty($_GET['kondisi'])){
-      $where[] = "kondisi='".mysqli_real_escape_string($conn,$_GET['kondisi'])."'";
-    }
-    if(!empty($_GET['lokasi'])){
-      $where[] = "lokasi LIKE '%".mysqli_real_escape_string($conn,$_GET['lokasi'])."%'";
-    }
-    $sql = "SELECT * FROM tabel_alat" . (count($where)? ' WHERE '.implode(' AND ',$where): '') . " ORDER BY id_alat DESC";
-    $rs = mysqli_query($conn, $sql);
-    while($row = mysqli_fetch_assoc($rs)){
-      echo '<tr>';
-      echo '<td>'.$row['id_alat'].'</td>';
-      echo '<td>'.htmlspecialchars($row['nama_alat']).'</td>';
-      echo '<td>'.htmlspecialchars($row['jenis']).'</td>';
-      echo '<td>'.htmlspecialchars($row['kondisi']).'</td>';
-      echo '<td>'.htmlspecialchars($row['lokasi']).'</td>';
-      echo '<td>'.htmlspecialchars($row['penanggung_jawab']).'</td>';
-      echo '<td>'.$row['tanggal_pembelian'].'</td>';
-      if(can_edit()) {
-        echo '<td><a class="btn btn-sm btn-primary me-1" href="alat_edit.php?id='.$row['id_alat'].'"><i class="fa fa-edit"></i> Edit</a> <a class="btn btn-sm btn-danger" href="?delete='.$row['id_alat'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a></td>';
+      <?php
+      $rs = mysqli_query($conn, "SELECT * FROM tabel_alat ORDER BY id_alat DESC");
+      while($row = mysqli_fetch_assoc($rs)){
+          echo '<tr>';
+          echo '<td>'.$row['id_alat'].'</td>';
+          echo '<td>'.htmlspecialchars($row['nama_alat']).'</td>';
+          echo '<td>'.htmlspecialchars($row['jenis']).'</td>';
+          echo '<td>'.htmlspecialchars($row['kondisi']).'</td>';
+          echo '<td>'.htmlspecialchars($row['lokasi']).'</td>';
+          echo '<td>'.htmlspecialchars($row['penanggung_jawab']).'</td>';
+          echo '<td>'.$row['tanggal_pembelian'].'</td>';
+          if(can_edit()) {
+              echo '<td><a class="btn btn-sm btn-primary me-1" href="#" onclick="editRow('.htmlspecialchars(json_encode($row), ENT_QUOTES).')">Edit</a> <a class="btn btn-sm btn-danger" href="?action=delete&id='.$row['id_alat'].'" onclick="return confirm(\'Hapus?\')">Hapus</a></td>';
+          }
+          echo '</tr>';
       }
-      echo '</tr>';
-    }
-    ?>
-    </tbody>
-  </table>
+      ?>
+      </tbody>
+    </table>
   </div>
 </div>
+
+<?php if(can_edit()): ?>
+<script>
+function editRow(data){
+    if(typeof data === 'string') data = JSON.parse(data);
+    document.getElementById('alat_id').value = data.id_alat;
+    document.getElementById('nama_alat').value = data.nama_alat;
+    document.getElementById('jenis').value = data.jenis;
+    document.getElementById('kondisi').value = data.kondisi;
+    document.getElementById('lokasi').value = data.lokasi;
+    document.getElementById('penanggung_jawab').value = data.penanggung_jawab;
+    document.getElementById('tanggal_pembelian').value = data.tanggal_pembelian;
+}
+function clearForm(){
+    document.getElementById('alat_id').value = '';
+}
+</script>
+<?php endif; ?>
 
 <?php include 'footer.php'; ?>

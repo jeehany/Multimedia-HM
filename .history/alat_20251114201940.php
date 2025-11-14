@@ -1,0 +1,76 @@
+<?php
+require_once 'config.php';
+require_login();
+
+// Only admin dapat edit/delete (role 'staff' removed)
+// delete handler (admin only)
+if(can_edit() && isset($_GET['delete'])){
+  $id = (int)$_GET['delete'];
+  mysqli_query($conn, "DELETE FROM tabel_alat WHERE id_alat = $id");
+  header('Location: alat.php'); exit;
+}
+
+include 'header.php';
+?>
+<h2>Data Alat Multimedia</h2>
+
+<?php if(can_edit()): ?>
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="post" class="row g-3">
+      <input type="hidden" name="id" id="alat_id">
+      <div class="col-md-4">
+        <form method="get" class="row g-2">
+          <div class="col-md-4"><input name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari nama atau jenis..."></div>
+          <div class="col-md-2"><select name="kondisi" class="form-select"><option value="">--Kondisi--</option><option value="baik">baik</option><option value="rusak ringan">rusak ringan</option><option value="rusak berat">rusak berat</option></select></div>
+          <div class="col-md-3"><input name="lokasi" value="<?=htmlspecialchars($_GET['lokasi'] ?? '')?>" class="form-control" placeholder="Lokasi"></div>
+          <div class="col-md-3 text-end"><a class="btn btn-success" href="alat_add.php"><i class="fa fa-plus"></i> Tambah Alat</a></div>
+        </form>
+      </div>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table table-striped">
+      <thead><tr><th>#</th><th>Nama</th><th>Jenis</th><th>Kondisi</th><th>Lokasi</th><th>PJ</th><th>Tgl Beli</th><?php if(can_edit()): ?><th>Aksi</th><?php endif; ?></tr></thead>
+      <tbody>
+      <?php
+      $rs = mysqli_query($conn, "SELECT * FROM tabel_alat ORDER BY id_alat DESC");
+      while($row = mysqli_fetch_assoc($rs)){
+          echo '<tr>';
+          echo '<td>'.$row['id_alat'].'</td>';
+          echo '<td>'.htmlspecialchars($row['nama_alat']).'</td>';
+          echo '<td>'.htmlspecialchars($row['jenis']).'</td>';
+          echo '<td>'.htmlspecialchars($row['kondisi']).'</td>';
+          echo '<td>'.htmlspecialchars($row['lokasi']).'</td>';
+          echo '<td>'.htmlspecialchars($row['penanggung_jawab']).'</td>';
+          echo '<td>'.$row['tanggal_pembelian'].'</td>';
+          if(can_edit()) {
+              echo '<td><a class="btn btn-sm btn-primary me-1" href="#" onclick="editRow('.htmlspecialchars(json_encode($row), ENT_QUOTES).')">Edit</a> <a class="btn btn-sm btn-danger" href="?action=delete&id='.$row['id_alat'].'" onclick="return confirm(\'Hapus?\')">Hapus</a></td>';
+          }
+          echo '</tr>';
+      }
+      ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<?php if(can_edit()): ?>
+<script>
+function editRow(data){
+    if(typeof data === 'string') data = JSON.parse(data);
+    document.getElementById('alat_id').value = data.id_alat;
+    document.getElementById('nama_alat').value = data.nama_alat;
+    document.getElementById('jenis').value = data.jenis;
+    document.getElementById('kondisi').value = data.kondisi;
+    document.getElementById('lokasi').value = data.lokasi;
+    document.getElementById('penanggung_jawab').value = data.penanggung_jawab;
+    document.getElementById('tanggal_pembelian').value = data.tanggal_pembelian;
+}
+function clearForm(){
+    document.getElementById('alat_id').value = '';
+}
+</script>
+<?php endif; ?>
+
+<?php include 'footer.php'; ?>

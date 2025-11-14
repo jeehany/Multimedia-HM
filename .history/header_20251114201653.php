@@ -36,7 +36,7 @@ require_once 'config.php';
 <div class="container mt-5">
   <div class="row">
     <main class="col-12 px-md-4 py-4">
-<?php if(is_logged_in()): ?>
+<?php endif; ?>
     <nav class="col-md-2 d-none d-md-block bg-dark sidebar p-3 text-white">
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
@@ -50,7 +50,5 @@ require_once 'config.php';
         </ul>
       </div>
     </nav>
+
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-<?php else: ?>
-    <!-- unauthenticated: main already opened above in else branch -->
-<?php endif; ?>
