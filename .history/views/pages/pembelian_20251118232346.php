@@ -24,13 +24,14 @@ include __DIR__ . '/../../header.php';
 <h2>Permohonan Pembelian</h2>
 
 <?php if(can_approve()): ?>
-<!-- Kepala/Approver dapat hanya approve/reject -->
+<!-- Kepala/Approver can create, edit, approve/reject -->
 <div class="card mb-3"><div class="card-body">
   <form method="get" class="row g-2 auto-filter">
     <div class="col-md-3"><input name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari nama atau alasan..."></div>
-    <div class="col-md-2"><input type="date" name="tgl_awal" class="form-control" value="<?=htmlspecialchars($_GET['tgl_awal'] ?? '')?>" title="Tanggal Awal" aria-label="Tanggal Awal" data-bs-toggle="tooltip" data-bs-title="Dari"></div>
-    <div class="col-md-2"><input type="date" name="tgl_akhir" class="form-control" value="<?=htmlspecialchars($_GET['tgl_akhir'] ?? '')?>" title="Tanggal Akhir" aria-label="Tanggal Akhir" data-bs-toggle="tooltip" data-bs-title="Sampai"></div>
-    <div class="col-md-5"><select name="status" class="form-select"><option value="">--Status--</option><option value="menunggu" <?=(!empty($_GET['status']) && $_GET['status']=='menunggu')?'selected':''?>>menunggu</option><option value="disetujui" <?=(!empty($_GET['status']) && $_GET['status']=='disetujui')?'selected':''?>>disetujui</option><option value="ditolak" <?=(!empty($_GET['status']) && $_GET['status']=='ditolak')?'selected':''?>>ditolak</option></select></div>
+    <div class="col-md-1"><input type="date" name="tgl_awal" class="form-control" value="<?=htmlspecialchars($_GET['tgl_awal'] ?? '')?>" title="Tanggal Awal" aria-label="Tanggal Awal" data-bs-toggle="tooltip" data-bs-title="Dari"></div>
+    <div class="col-md-1"><input type="date" name="tgl_akhir" class="form-control" value="<?=htmlspecialchars($_GET['tgl_akhir'] ?? '')?>" title="Tanggal Akhir" aria-label="Tanggal Akhir" data-bs-toggle="tooltip" data-bs-title="Sampai"></div>
+    <div class="col-md-2"><select name="status" class="form-select"><option value="">--Status--</option><option value="menunggu" <?=(!empty($_GET['status']) && $_GET['status']=='menunggu')?'selected':''?>>menunggu</option><option value="disetujui" <?=(!empty($_GET['status']) && $_GET['status']=='disetujui')?'selected':''?>>disetujui</option><option value="ditolak" <?=(!empty($_GET['status']) && $_GET['status']=='ditolak')?'selected':''?>>ditolak</option></select></div>
+    <div class="col-md-2 align-self-end"><a class="btn btn-success" href="pembelian_add.php"><i class="fa fa-plus"></i> Tambah</a></div>
   </form>
   <small class="text-muted mt-2 d-block"><i class="fa fa-info-circle"></i> Tanggal Awal-Akhir: rentang tanggal pencarian permohonan</small>
 </div></div>
@@ -39,8 +40,8 @@ include __DIR__ . '/../../header.php';
 <div class="card mb-3"><div class="card-body">
   <form method="get" class="row g-2 auto-filter">
     <div class="col-md-3"><input name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari nama atau alasan..."></div>
-    <div class="col-md-2"><input type="date" name="tgl_awal" class="form-control" value="<?=htmlspecialchars($_GET['tgl_awal'] ?? '')?>" title="Tanggal Awal" aria-label="Tanggal Awal" data-bs-toggle="tooltip" data-bs-title="Dari"></div>
-    <div class="col-md-2"><input type="date" name="tgl_akhir" class="form-control" value="<?=htmlspecialchars($_GET['tgl_akhir'] ?? '')?>" title="Tanggal Akhir" aria-label="Tanggal Akhir" data-bs-toggle="tooltip" data-bs-title="Sampai"></div>
+    <div class="col-md-1"><input type="date" name="tgl_awal" class="form-control" value="<?=htmlspecialchars($_GET['tgl_awal'] ?? '')?>" title="Tanggal Awal" aria-label="Tanggal Awal" data-bs-toggle="tooltip" data-bs-title="Dari"></div>
+    <div class="col-md-1"><input type="date" name="tgl_akhir" class="form-control" value="<?=htmlspecialchars($_GET['tgl_akhir'] ?? '')?>" title="Tanggal Akhir" aria-label="Tanggal Akhir" data-bs-toggle="tooltip" data-bs-title="Sampai"></div>
     <div class="col-md-2"><select name="status" class="form-select"><option value="">--Status--</option><option value="menunggu" <?=(!empty($_GET['status']) && $_GET['status']=='menunggu')?'selected':''?>>menunggu</option><option value="disetujui" <?=(!empty($_GET['status']) && $_GET['status']=='disetujui')?'selected':''?>>disetujui</option><option value="ditolak" <?=(!empty($_GET['status']) && $_GET['status']=='ditolak')?'selected':''?>>ditolak</option></select></div>
     <div class="col-md-2 align-self-end"><a class="btn btn-success" href="pembelian_add.php"><i class="fa fa-plus"></i> Tambah</a></div>
   </form>
@@ -98,8 +99,10 @@ while($r=mysqli_fetch_assoc($q)){
   echo '<td>'.$status_badge.'</td>';
   
   if(can_approve()) {
-      // Kepala: dapat approve/reject saja
+      // Kepala: dapat create, edit, delete, approve, reject
       echo '<td>';
+      echo '<a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a>';
+      echo '<a class="btn btn-sm btn-danger me-1" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a>';
       if($r['status'] === 'menunggu') {
           echo '<a class="btn btn-sm btn-success me-1" href="?approve='.$r['id_pembelian'].'&status_baru=disetujui" onclick="return confirm(\'Setujui?\')"><i class="fa fa-check"></i> Setujui</a>';
           echo '<a class="btn btn-sm btn-warning" href="?approve='.$r['id_pembelian'].'&status_baru=ditolak" onclick="return confirm(\'Tolak?\')"><i class="fa fa-times"></i> Tolak</a>';
