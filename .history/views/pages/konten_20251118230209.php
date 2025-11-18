@@ -20,11 +20,12 @@ include __DIR__ . '/../../header.php';
 ?>
 <h2>Manajemen Konten Multimedia</h2>
 
+<?php if(can_edit()): ?>
 <div class="card mb-3"><div class="card-body">
   <form method="get" class="row g-2 auto-filter">
     <div class="col-md-4"><input name="q" value="<?=htmlspecialchars($_GET['q'] ?? '')?>" class="form-control" placeholder="Cari judul atau deskripsi..."></div>
     <div class="col-md-3"><select name="jenis" class="form-select"><option value="">--Jenis--</option><option value="foto" <?=(!empty($_GET['jenis']) && $_GET['jenis']=='foto')?'selected':''?>>foto</option><option value="video" <?=(!empty($_GET['jenis']) && $_GET['jenis']=='video')?'selected':''?>>video</option><option value="audio" <?=(!empty($_GET['jenis']) && $_GET['jenis']=='audio')?'selected':''?>>audio</option><option value="desain" <?=(!empty($_GET['jenis']) && $_GET['jenis']=='desain')?'selected':''?>>desain</option></select></div>
-    <div class="col-md-2 align-self-end"><?php if(can_edit()): ?><a class="btn btn-success" href="konten_add.php"><i class="fa fa-plus"></i> Tambah</a><?php endif; ?></div>
+    <div class="col-md-2 align-self-end"><a class="btn btn-success" href="konten_add.php"><i class="fa fa-plus"></i> Tambah</a></div>
   </form>
 </div></div>
 

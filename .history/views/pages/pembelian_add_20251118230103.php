@@ -21,10 +21,11 @@ include __DIR__ . '/../../header.php';
       <h4><i class="fa fa-plus-circle"></i> Tambah Permohonan Pembelian</h4>
       <?php if($err): ?><div class="alert alert-danger"><?=htmlspecialchars($err)?></div><?php endif; ?>
       <form method="post" class="row g-3">
-        <div class="col-md-6"><label class="form-label">Nama Alat</label><input name="nama_alat" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Estimasi Biaya</label><input type="number" name="estimasi_biaya" class="form-control" required></div>
-        <div class="col-md-6"><label class="form-label">Tanggal Permohonan</label><input type="date" name="tanggal_permohonan" class="form-control" required></div>
-        <div class="col-12"><label class="form-label">Alasan</label><textarea name="alasan" class="form-control" required></textarea></div>
+        <div class="col-md-6"><label class="form-label">Nama Alat</label><input name="nama_alat" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label">Estimasi Biaya</label><input type="number" name="estimasi_biaya" class="form-control"></div>
+        <div class="col-md-6"><label class="form-label">Tanggal Permohonan</label><input type="date" name="tanggal_permohonan" class="form-control"></div>
+        <div class="col-12"><label class="form-label">Alasan</label><textarea name="alasan" class="form-control"></textarea></div>
+        <div class="col-md-4"><label class="form-label">Status</label><select name="status" class="form-select"><option value="menunggu">menunggu</option><option value="disetujui">disetujui</option><option value="ditolak">ditolak</option></select></div>
         <div class="col-12">
           <button class="btn btn-success"><i class="fa fa-save"></i> Simpan</button>
           <a class="btn btn-secondary" href="pembelian.php"><i class="fa fa-arrow-left"></i> Kembali</a>

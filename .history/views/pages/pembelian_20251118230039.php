@@ -40,24 +40,13 @@ include __DIR__ . '/../../header.php';
 </div></div>
 
 <div class="card"><div class="card-body">
-<table class="table table-sm"><thead><tr><th>#</th><th>Nama</th><th>Estimasi</th><th>Tgl</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
+<table class="table table-sm"><thead><tr><th>#</th><th>Nama</th><th>Estimasi</th><th>Tgl</th><th>Status</th><?php if(can_edit() || can_approve()): ?><th>Aksi</th><?php endif; ?></tr></thead><tbody>
 <?php
 // build filters
 $where = [];
 if(!empty($_GET['q'])){
     $qstr = mysqli_real_escape_string($conn, $_GET['q']);
     $where[] = "(nama_alat LIKE '%$qstr%' OR alasan LIKE '%$qstr%')";
-}
-if(!empty($_GET['tgl_awal']) && !empty($_GET['tgl_akhir'])){
-    $tgl_awal = mysqli_real_escape_string($conn, $_GET['tgl_awal']);
-    $tgl_akhir = mysqli_real_escape_string($conn, $_GET['tgl_akhir']);
-    $where[] = "tanggal_permohonan BETWEEN '$tgl_awal' AND '$tgl_akhir'";
-} elseif(!empty($_GET['tgl_awal'])){
-    $tgl_awal = mysqli_real_escape_string($conn, $_GET['tgl_awal']);
-    $where[] = "tanggal_permohonan >= '$tgl_awal'";
-} elseif(!empty($_GET['tgl_akhir'])){
-    $tgl_akhir = mysqli_real_escape_string($conn, $_GET['tgl_akhir']);
-    $where[] = "tanggal_permohonan <= '$tgl_akhir'";
 }
 if(!empty($_GET['status'])){
     $where[] = "status='".mysqli_real_escape_string($conn,$_GET['status'])."'";
@@ -77,16 +66,18 @@ while($r=mysqli_fetch_assoc($q)){
   echo '<td>'.$r['tanggal_permohonan'].'</td>';
   echo '<td>'.$status_badge.'</td>';
   
-  echo '<td>';
-  echo '<a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a>';
-  echo '<a class="btn btn-sm btn-danger me-1" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i></a>';
-  if($r['status'] === 'menunggu') {
-      echo '<a class="btn btn-sm btn-success me-1" href="?approve='.$r['id_pembelian'].'&status_baru=disetujui" onclick="return confirm(\'Setujui?\')"><i class="fa fa-check"></i> Setujui</a>';
-      echo '<a class="btn btn-sm btn-warning" href="?approve='.$r['id_pembelian'].'&status_baru=ditolak" onclick="return confirm(\'Tolak?\')"><i class="fa fa-times"></i> Tolak</a>';
-  } else {
-      echo '<span class="badge bg-secondary">'.ucfirst($r['status']).'</span>';
+  if(can_edit()) {
+      echo '<td><a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a><a class="btn btn-sm btn-danger" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i> Hapus</a></td>';
+  } elseif(can_approve()) {
+      echo '<td>';
+      if($r['status'] === 'menunggu') {
+          echo '<a class="btn btn-sm btn-success me-1" href="?approve='.$r['id_pembelian'].'&status_baru=disetujui" onclick="return confirm(\'Setujui permohonan ini?\')">Setujui</a>';
+          echo '<a class="btn btn-sm btn-danger" href="?approve='.$r['id_pembelian'].'&status_baru=ditolak" onclick="return confirm(\'Tolak permohonan ini?\')">Tolak</a>';
+      } else {
+          echo '<span class="badge bg-secondary">'.ucfirst($r['status']).'</span>';
+      }
+      echo '</td>';
   }
-  echo '</td>';
   echo '</tr>';
 }
 ?></tbody></table>
