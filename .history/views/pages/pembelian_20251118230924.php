@@ -58,7 +58,7 @@ include __DIR__ . '/../../header.php';
 <?php endif; ?>
 
 <div class="card"><div class="card-body">
-<table class="table table-sm"><thead><tr><th>#</th><th>Nama</th><th>Estimasi</th><th>Tgl</th><th>Status</th><?php if(can_edit() || can_approve()): ?><th>Aksi</th><?php endif; ?></tr></thead><tbody>
+<table class="table table-sm"><thead><tr><th>#</th><th>Nama</th><th>Estimasi</th><th>Tgl</th><th>Status</th><th>Aksi</th></tr></thead><tbody>
 <?php
 // build filters
 $where = [];
@@ -95,23 +95,16 @@ while($r=mysqli_fetch_assoc($q)){
   echo '<td>'.$r['tanggal_permohonan'].'</td>';
   echo '<td>'.$status_badge.'</td>';
   
-  if(can_approve()) {
-      // Kepala: dapat create, edit, delete, approve, reject
-      echo '<td>';
-      echo '<a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a>';
-      echo '<a class="btn btn-sm btn-danger me-1" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i></a>';
-      if($r['status'] === 'menunggu') {
-          echo '<a class="btn btn-sm btn-success me-1" href="?approve='.$r['id_pembelian'].'&status_baru=disetujui" onclick="return confirm(\'Setujui?\')"><i class="fa fa-check"></i> Setujui</a>';
-          echo '<a class="btn btn-sm btn-warning" href="?approve='.$r['id_pembelian'].'&status_baru=ditolak" onclick="return confirm(\'Tolak?\')"><i class="fa fa-times"></i> Tolak</a>';
-      }
-      echo '</td>';
-  } elseif(can_edit()) {
-      // Admin: dapat edit & delete, but no approve/reject
-      echo '<td>';
-      echo '<a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a>';
-      echo '<a class="btn btn-sm btn-danger" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i></a>';
-      echo '</td>';
+  echo '<td>';
+  echo '<a class="btn btn-sm btn-primary me-1" href="pembelian_edit.php?id='.$r['id_pembelian'].'"><i class="fa fa-edit"></i> Edit</a>';
+  echo '<a class="btn btn-sm btn-danger me-1" href="?delete='.$r['id_pembelian'].'" onclick="return confirm(\'Hapus?\')"><i class="fa fa-trash"></i></a>';
+  if($r['status'] === 'menunggu') {
+      echo '<a class="btn btn-sm btn-success me-1" href="?approve='.$r['id_pembelian'].'&status_baru=disetujui" onclick="return confirm(\'Setujui?\')"><i class="fa fa-check"></i> Setujui</a>';
+      echo '<a class="btn btn-sm btn-warning" href="?approve='.$r['id_pembelian'].'&status_baru=ditolak" onclick="return confirm(\'Tolak?\')"><i class="fa fa-times"></i> Tolak</a>';
+  } else {
+      echo '<span class="badge bg-secondary">'.ucfirst($r['status']).'</span>';
   }
+  echo '</td>';
   echo '</tr>';
 }
 ?></tbody></table>
