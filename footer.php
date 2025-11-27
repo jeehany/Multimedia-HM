@@ -1,8 +1,13 @@
 
-    <footer class="pt-4 mt-4 border-top">
-      <div class="d-flex justify-content-between">
-        <div>© HM Official - Multimedia</div>
-        <div>Built with Bootstrap 5</div>
+    <footer>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <i class="fas fa-play-circle me-1" style="color: #4f46e5;"></i>
+          <span>&copy; <?= date('Y') ?> HM Multimedia</span>
+        </div>
+        <div class="text-muted">
+          <small>Sistem Manajemen Alat Multimedia</small>
+        </div>
       </div>
     </footer>
     </main>

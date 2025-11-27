@@ -141,64 +141,104 @@ $report = $_GET['report'] ?? 'index';
 ?>
 
 <?php if($report === 'index'): ?>
-<h2>Halaman Laporan</h2>
-<div class="row">
-  <div class="col-md-6 mb-3">
+
+<div class="page-header">
+  <h2><i class="fas fa-file-alt me-2" style="color: #4f46e5;"></i>Halaman Laporan</h2>
+  <p>Pilih jenis laporan yang ingin ditampilkan atau diunduh</p>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-6">
     <div class="card h-100">
       <div class="card-body">
-        <h5 class="card-title"><i class="fa fa-box"></i> Laporan Data Alat Multimedia</h5>
-        <p class="card-text">Ringkasan alat multimedia, kondisi, dan distribusi per lokasi.</p>
-        <a class="btn btn-sm btn-primary me-2" href="laporan.php?report=alat">Lihat Laporan</a>
-        <a class="btn btn-sm btn-success me-2" href="laporan.php?export=alat">Export CSV</a>
-        <button class="btn btn-sm btn-secondary" onclick="window.open('laporan.php?report=alat&print=1','_blank')">Print / PDF</button>
+        <div class="d-flex align-items-center mb-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(79,70,229,0.1);">
+            <i class="fas fa-box" style="color: #4f46e5; font-size: 1.25rem;"></i>
+          </div>
+          <h5 class="card-title mb-0">Laporan Data Alat</h5>
+        </div>
+        <p class="card-text text-muted mb-3">Ringkasan alat multimedia, kondisi, dan distribusi per lokasi.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary" href="laporan.php?report=alat"><i class="fas fa-eye me-1"></i> Lihat</a>
+          <a class="btn btn-success" href="laporan.php?export=alat"><i class="fas fa-download me-1"></i> CSV</a>
+          <button class="btn btn-secondary" onclick="window.open('laporan.php?report=alat&print=1','_blank')"><i class="fas fa-print me-1"></i> Print</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="col-md-6 mb-3">
+  <div class="col-md-6">
     <div class="card h-100">
       <div class="card-body">
-        <h5 class="card-title"><i class="fa fa-tools"></i> Laporan Maintenance Alat</h5>
-        <p class="card-text">Riwayat perawatan alat dan total biaya maintenance.</p>
-        <a class="btn btn-sm btn-primary me-2" href="laporan.php?report=maintenance">Lihat Laporan</a>
-        <a class="btn btn-sm btn-success me-2" href="laporan.php?export=maintenance">Export CSV</a>
-        <button class="btn btn-sm btn-secondary" onclick="window.open('laporan.php?report=maintenance&print=1','_blank')">Print / PDF</button>
+        <div class="d-flex align-items-center mb-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(245,158,11,0.1);">
+            <i class="fas fa-wrench" style="color: #f59e0b; font-size: 1.25rem;"></i>
+          </div>
+          <h5 class="card-title mb-0">Laporan Maintenance</h5>
+        </div>
+        <p class="card-text text-muted mb-3">Riwayat perawatan alat dan total biaya maintenance.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary" href="laporan.php?report=maintenance"><i class="fas fa-eye me-1"></i> Lihat</a>
+          <a class="btn btn-success" href="laporan.php?export=maintenance"><i class="fas fa-download me-1"></i> CSV</a>
+          <button class="btn btn-secondary" onclick="window.open('laporan.php?report=maintenance&print=1','_blank')"><i class="fas fa-print me-1"></i> Print</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="col-md-6 mb-3">
+  <div class="col-md-6">
     <div class="card h-100">
       <div class="card-body">
-        <h5 class="card-title"><i class="fa fa-cart-plus"></i> Laporan Permohonan Pembelian</h5>
-        <p class="card-text">Daftar permohonan pembelian alat dan status.</p>
-        <a class="btn btn-sm btn-primary me-2" href="laporan.php?report=pembelian">Lihat Laporan</a>
-        <a class="btn btn-sm btn-success me-2" href="laporan.php?export=pembelian">Export CSV</a>
-        <button class="btn btn-sm btn-secondary" onclick="window.open('laporan.php?report=pembelian&print=1','_blank')">Print / PDF</button>
+        <div class="d-flex align-items-center mb-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(16,185,129,0.1);">
+            <i class="fas fa-shopping-cart" style="color: #10b981; font-size: 1.25rem;"></i>
+          </div>
+          <h5 class="card-title mb-0">Laporan Pembelian</h5>
+        </div>
+        <p class="card-text text-muted mb-3">Daftar permohonan pembelian alat dan status persetujuan.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary" href="laporan.php?report=pembelian"><i class="fas fa-eye me-1"></i> Lihat</a>
+          <a class="btn btn-success" href="laporan.php?export=pembelian"><i class="fas fa-download me-1"></i> CSV</a>
+          <button class="btn btn-secondary" onclick="window.open('laporan.php?report=pembelian&print=1','_blank')"><i class="fas fa-print me-1"></i> Print</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="col-md-6 mb-3">
+  <div class="col-md-6">
     <div class="card h-100">
       <div class="card-body">
-        <h5 class="card-title"><i class="fa fa-money-bill"></i> Laporan Pengeluaran</h5>
-        <p class="card-text">Daftar pengeluaran dari pembelian dan maintenance.</p>
-        <a class="btn btn-sm btn-primary me-2" href="laporan.php?report=pengeluaran">Lihat Laporan</a>
-        <a class="btn btn-sm btn-success me-2" href="laporan.php?export=pengeluaran">Export CSV</a>
-        <button class="btn btn-sm btn-secondary" onclick="window.open('laporan.php?report=pengeluaran&print=1','_blank')">Print / PDF</button>
+        <div class="d-flex align-items-center mb-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(239,68,68,0.1);">
+            <i class="fas fa-wallet" style="color: #ef4444; font-size: 1.25rem;"></i>
+          </div>
+          <h5 class="card-title mb-0">Laporan Pengeluaran</h5>
+        </div>
+        <p class="card-text text-muted mb-3">Daftar pengeluaran dari pembelian dan maintenance.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary" href="laporan.php?report=pengeluaran"><i class="fas fa-eye me-1"></i> Lihat</a>
+          <a class="btn btn-success" href="laporan.php?export=pengeluaran"><i class="fas fa-download me-1"></i> CSV</a>
+          <button class="btn btn-secondary" onclick="window.open('laporan.php?report=pengeluaran&print=1','_blank')"><i class="fas fa-print me-1"></i> Print</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="col-md-6 mb-3">
+  <div class="col-md-6">
     <div class="card h-100">
       <div class="card-body">
-        <h5 class="card-title"><i class="fa fa-photo-video"></i> Laporan Konten Multimedia</h5>
-        <p class="card-text">Daftar konten multimedia yang telah diunggah.</p>
-        <a class="btn btn-sm btn-primary me-2" href="laporan.php?report=konten">Lihat Laporan</a>
-        <a class="btn btn-sm btn-success me-2" href="laporan.php?export=konten">Export CSV</a>
-        <button class="btn btn-sm btn-secondary" onclick="window.open('laporan.php?report=konten&print=1','_blank')">Print / PDF</button>
+        <div class="d-flex align-items-center mb-3">
+          <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px; background: rgba(139,92,246,0.1);">
+            <i class="fas fa-photo-video" style="color: #8b5cf6; font-size: 1.25rem;"></i>
+          </div>
+          <h5 class="card-title mb-0">Laporan Konten</h5>
+        </div>
+        <p class="card-text text-muted mb-3">Daftar konten multimedia yang telah diunggah.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          <a class="btn btn-primary" href="laporan.php?report=konten"><i class="fas fa-eye me-1"></i> Lihat</a>
+          <a class="btn btn-success" href="laporan.php?export=konten"><i class="fas fa-download me-1"></i> CSV</a>
+          <button class="btn btn-secondary" onclick="window.open('laporan.php?report=konten&print=1','_blank')"><i class="fas fa-print me-1"></i> Print</button>
+        </div>
       </div>
     </div>
   </div>
